@@ -1,53 +1,58 @@
-"use client";
-import { useEffect } from "react";
-import { motion, stagger, useAnimate } from "framer-motion";
-import { cn } from "@/utils/cn";
+'use client';
+import { useEffect }                   from 'react';
+import { motion, stagger, useAnimate } from 'framer-motion';
+import { cn }                          from '@/lib/utils';
 
-const TextGenerateEffect = ({
+const TextGenerateEffect = ( {
 	words,
-	classOverride,
+	wOvrClass,
+	wOvrIDs,
 	className,
-}: {
-	words: string;
-	classOverride?: string[];
-	className?: string;
-}) => {
-	const [scope, animate] = useAnimate();
-	let wordsArray = words.split(" ");
-	useEffect(() => {
+} : {
+	words : string;
+	wOvrClass? : string;
+	wOvrIDs? : number[];
+	className? : string;
+} ) => {
+	const [ scope, animate ] = useAnimate();
+	let wordsArray = words.split( ' ' );
+
+	useEffect( () => {
 		animate(
-			"span",
+			'span',
 			{
-				opacity: 1,
+				opacity : 1,
 			},
 			{
-				duration: 2,
-				delay: stagger(0.2),
+				duration : 2,
+				delay    : stagger( 0.2 ),
 			}
 		);
-	}, [scope.current]);
+	}, [ animate ] );
 
 	const renderWords = () => {
 		return (
 			<motion.div ref={scope}>
-				{wordsArray.map((word, idx) => {
+				{wordsArray.map( ( word, idx ) => {
+					const wClassName = wOvrIDs?.includes( idx ) && wOvrClass;
+
 					return (
 						<motion.span
 							key={word + idx}
-							className={`${classOverride?.[idx] || 'dark:text-white text-black'} opacity-0`}
+							className={`${wClassName || 'text-white'} opacity-0`}
 						>
-							{word}{" "}
+							{word}{' '}
 						</motion.span>
 					);
-				})}
+				} )}
 			</motion.div>
 		);
 	};
 
 	return (
-		<div className={cn("font-bold", className)}>
-			<div className="my-4">
-				<div className=" dark:text-white text-black leading-snug tracking-wide">
+		<div className={cn( 'font-bold', className )}>
+			<div className='my-4'>
+				<div className=' dark:text-white text-black leading-snug tracking-wide'>
 					{renderWords()}
 				</div>
 			</div>
